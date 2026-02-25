@@ -1,0 +1,170 @@
+1. Configuración General: Colores y Fuentes
+Todo el aspecto visual principal (colores corporativos y tipografías) se define en la parte superior de tu código, dentro de la etiqueta <head>.
+
+Cambiar los Colores del Sello Discográfico
+Busca el bloque de código <script> que contiene tailwind.config. Aquí es donde defines tu paleta de colores.
+
+JavaScript
+colors: {
+    brand: '#eab308', // Este es el color amarillo oro principal
+    dark: '#0f172a',  // Color de fondo secundario (paneles, tarjetas)
+    darker: '#020617' // Color de fondo principal (el más oscuro)
+}
+Qué hacer: Si tu sello usa un color rojo neón, simplemente cambia #eab308 por #ff003c (o el código Hexadecimal que prefieras). Automáticamente, todos los botones, bordes y textos que usan el color brand cambiarán en toda la página.
+
+Cambiar las Tipografías
+Actualmente usas Inter para el texto normal y Oswald para los títulos grandes.
+
+Ve a la línea de <link href="https://fonts.googleapis.com/css2?...">.
+
+Si quieres cambiarla, busca nuevas fuentes en Google Fonts, reemplaza ese enlace y luego actualiza los nombres en el tailwind.config (dentro de fontFamily).
+
+2. La Barra de Navegación (Header) y Redes Sociales
+La barra superior (<nav>) se queda fija al hacer scroll.
+
+Cambiar el Nombre del Sello: Busca el texto CÓDIGO <span class="text-brand">RECORDS</span>. Puedes cambiar "CÓDIGO" y "RECORDS" por el nombre de tu discográfica.
+
+Enlaces de Redes Sociales: Busca los iconos de Instagram, TikTok y YouTube. Verás que tienen un enlace vacío href="#". Cambia el # por la URL real de tus redes, por ejemplo: href="https://instagram.com/tu_perfil".
+
+3. Modificando la Página Principal (Home)
+Toda la vista principal está envuelta en el contenedor <div id="view-home" class="page-view block">.
+
+El Hero (Sección de Bienvenida)
+Imagen de fondo: Busca la etiqueta <img src="https://images.unsplash.com/..." alt="Label Background">. Cambia esa URL por una foto de tu estudio o tu equipo.
+
+Textos: Justo debajo encontrarás los textos SELLO INDEPENDIENTE, El Nuevo Orden y Urbano. Modifícalos para reflejar el eslogan de tu marca.
+
+Las Tarjetas del Roster de Artistas
+Cada artista tiene una tarjeta (card) que, al hacer clic, te lleva a su perfil.
+
+HTML
+<div onclick="showView('view-artist-1')" class="...">
+    <img src="URL_DE_LA_FOTO" alt="El Nova" ...>
+    ...
+    <h3 ...>El Nova</h3>
+</div>
+Cómo personalizar: 1. Cambia la URL de la imagen en el src de la etiqueta <img>.
+2. Cambia el texto del género (ej. "Trap / Reggaeton").
+3. Cambia el nombre del artista (ej. "El Nova").
+4. Importante: Nota el atributo onclick="showView('view-artist-1')". Esto es lo que le dice al código qué perfil abrir cuando alguien hace clic.
+
+4. Personalizando los Perfiles de los Artistas
+Cada artista tiene su propio bloque oculto, por ejemplo: <div id="view-artist-1" class="page-view hidden">.
+
+Imágenes y Biografía
+Dentro de este bloque, encontrarás:
+
+Imagen de fondo (Hero del artista): La primera <img> con opacity-30.
+
+Foto de perfil: La segunda <img> que tiene las clases rounded-full (que la hace circular).
+
+Redes sociales del artista: Igual que en el header, busca los href="#" debajo del nombre del artista para poner su Spotify o Instagram personal.
+
+Biografía: Busca el texto <p class="text-gray-300...">Con raíces en el movimiento under...</p> y escribe la historia real del artista.
+
+Configurar la Música y el Reproductor (Próximos Estrenos)
+¡Esta es la parte más importante! El botón de "Play" tiene datos ocultos que el reproductor lee para reproducir la canción.
+Busca este botón dentro del perfil del artista:
+
+HTML
+<button class="play-btn ..." 
+    data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" 
+    data-title="Noche de Jangueo" 
+    data-artist="El Nova"
+    data-cover="URL_DE_LA_PORTADA">
+    <i data-lucide="play" class="..."></i>
+</button>
+data-src: Cambia esto por el enlace directo al archivo .mp3 o .wav de la canción de tu artista.
+
+data-title y data-artist: El nombre de la canción y del artista que aparecerán en el reproductor flotante abajo.
+
+data-cover: La miniatura o portada del sencillo que saldrá en el reproductor.
+
+5. Entendiendo el JavaScript (La Lógica Interna)
+Al final de tu archivo está la etiqueta <script>. Aquí es donde ocurre la magia. No necesitas ser experto, pero es bueno entender tres funciones clave:
+
+Navegación (showView): Cuando haces clic en un artista, esta función oculta todas las secciones que tengan la clase .page-view y solo muestra el ID que le pediste (por ejemplo, view-artist-1). También hace aparecer el botón de "Volver" en el menú.
+
+El Reproductor (togglePlay): Escucha cuando haces clic en un botón de Play. Extrae los datos de la canción (data-src, etc.), los inyecta en el reproductor global flotante de la parte inferior y comienza a reproducir el audio.
+
+El Límite de 20 Segundos y el Modal:
+Busca esta línea en el JavaScript:
+
+JavaScript
+const MAX_PREVIEW_TIME = 20;
+Qué hace: El código revisa constantemente el tiempo de la canción. Si llega a 20 segundos, pausa el audio, lo reinicia a 0 y dispara la función showModal().
+
+Cómo cambiarlo: Si quieres que los fans escuchen 30 segundos, cambia el 20 por 30. Si quieres que escuchen la canción completa, puedes eliminar todo el bloque if (audio.currentTime >= MAX_PREVIEW_TIME) { ... }.
+
+El Modal de Pre-Save
+El cuadro que aparece pidiendo el "Pre-Save" está en el HTML bajo el ID <div id="cta-modal"...>. Puedes cambiar los textos allí adentro ("¡Tiempo terminado!", "Ir al Pre-Save") y poner el link de la distribuidora (DistroKid, Altafonte, etc.) en el botón principal.
+
+
+
+
+1. Modificar un artista existente (Ej. Cambiar a "El Nova" por tu artista)
+Para modificar un artista, tienes que cambiar la información en dos lugares: en la tarjeta del menú principal (Home) y en su perfil.
+
+En el Home:
+Busca el texto ``. Ahí verás la foto, el género y el nombre.
+
+Foto: Cambia el enlace dentro de <img src="...">.
+
+Textos: Cambia "Trap / Reggaeton" y "El Nova" por los datos reales.
+
+En su Perfil:
+Busca el texto . Todo lo que está debajo hasta  es su página.
+
+Foto de fondo y de perfil: Busca las etiquetas <img> y pon tus enlaces.
+
+Nombre y Bio: Cambia el texto "EL NOVA" (dentro de la etiqueta <h1>) y reescribe el texto del párrafo <p> que contiene su historia.
+
+2. Cómo agregar una canción nueva a un artista
+Imagina que tu artista va a sacar un segundo tema y quieres ponerlo al lado del primero en su perfil.
+
+Ve al perfil del artista en el código (por ejemplo, view-artist-1).
+
+Busca la sección de "Próximos Estrenos". Verás que hay un <div class="grid..."> y adentro está la tarjeta de la canción.
+
+Copia todo el bloque de la canción actual. Empieza en <div class="bg-darker rounded-xl... group"> y termina en su correspondiente </div>.
+
+Pégalo justo debajo del original, dentro de la misma cuadrícula (grid).
+
+Actualiza los datos del reproductor en la nueva copia:
+Busca el botón <button class="play-btn"...> y cambia esto:
+
+No olvides cambiar también la portada visible y el texto que ve el usuario en la tarjeta HTML.
+
+3. Cómo agregar un artista completamente nuevo
+En tu código actual hay 3 artistas y una tarjeta de "Próximo Fichaje". Vamos a convertir esa tarjeta en tu 4º artista.
+
+Paso A: Crear su tarjeta en el Home
+
+Busca el comentario ``. Borra todo ese bloque.
+
+En su lugar, copia la tarjeta entera del "Artista 3" y pégala ahí.
+
+EL DETALLE CLAVE: En la primera línea de tu nueva tarjeta, cambia el onclick:
+
+Dice: onclick="showView('view-artist-3')"
+
+Cámbialo a: onclick="showView('view-artist-4')"
+
+Cambia la foto, nombre y género en esta nueva tarjeta para que represente a tu nuevo artista.
+
+Paso B: Crear su página de perfil
+
+Ve casi al final del código, busca donde dice ``.
+
+Copia TODO el bloque de código del Artista 3 (desde hasta).
+
+Pégalo justo debajo.
+
+EL DETALLE CLAVE: En la primera línea de tu código pegado, cambia el ID:
+
+Dice: <div id="view-artist-3" class="page-view hidden">
+
+Cámbialo a: <div id="view-artist-4" class="page-view hidden">
+(Esto conecta la tarjeta del Home con esta nueva página).
+
+¡Listo! Ahora solo edita los textos, fotos y canciones de este nuevo bloque "view-artist-4" como te expliqué en los pasos anteriores.
